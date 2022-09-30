@@ -1,0 +1,86 @@
+﻿@model OneStopRecruitment.Areas.DashboardArea.ViewModels.Staff.DashboardStaffViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <div class="row -has-gap">
+        <div class="col-sm-4">
+            <div class="C--widget type--1 -linear-maroon">
+                <div class="card__head">
+                    <h3 class="card__title">Current Period</h3>
+                </div>
+                <div class="card__right">
+                    <h3 class="card__content">@Model.DashboardStaff.CurrentPeriod</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="C--widget type--1 -linear-blue">
+                <div class="card__head">
+                    <h3 class="card__title">Current Stage</h3>
+                </div>
+                <div class="card__right">
+                    <h3 class="card__content">@Model.DashboardStaff.CurrentStage</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="C--widget type--1 -linear-purple">
+                <div class="card__head">
+                    <h3 class="card__title">Number of Candidates</h3>
+                </div>
+                <div class="card__right">
+                    <h3 class="card__content jsAutonumeric">@Model.DashboardStaff.NumberOfCandidates</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row -has-gap">
+        <div class="col">
+            <div class="C--table-card type--1">
+                <div class="card__head">
+                    <h3 class="card__title">Upcoming Schedule</h3>
+                </div>
+                <div class="card__body">
+                    <div class="C--datatables type--1 -autoload">
+                        <table id="tableUpcomingSchedule" class="datatables ui celled table">
+                            <thead class="table-head">
+                                <tr>
+                                    <th style="width: 500px;">Activity</th>
+                                    <th style="width: 300px;">Date</th>
+                                    <th style="width: 250px;">Time</th>
+                                    <th style="width: 200px;">Room</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.DashboardStaff.UpcomingSchedules.Count(); i++)
+                                {
+                                    var item = Model.DashboardStaff.UpcomingSchedules.ElementAt(i);
+                                    <tr>
+                                        <td style="width: 500px;">
+                                            @if (item.SubStageName == null || item.SubStageName.Trim() == "")
+                                            {
+                                                <text>@item.StageName</text>
+                                            }
+                                            else
+                                            {
+                                                <text>@item.StageName (@item.SubStageName)</text>
+                                            }
+                                        </td>
+                                        <td style="width: 300px;">@item.Date.ToString("ddd, dd MMM yyyy")</td>
+                                        <td style="width: 250px;">@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</td>
+                                        <td style="width: 200px;">@item.Room</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
