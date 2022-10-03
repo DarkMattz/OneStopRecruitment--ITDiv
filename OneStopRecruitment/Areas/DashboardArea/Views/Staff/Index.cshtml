@@ -36,6 +36,41 @@
             </div>
         </div>
     </div>
+
+    <div class="row -has-gap">
+        <div class="col-sm-12">
+            <div class="C--table-card type--1 mt-2">
+                <div class="card__head">
+                    <h3 class="card__title">Notification List</h3>
+                </div>
+                <div class="card__body">
+                    <div class="C--datatables type--1 -autoload">
+                        <table id="notificationTable" class="datatables ui celled table">
+                            <thead class="table-head">
+                                <tr>
+                                    <th style="width: 20%">Date & Time</th>
+                                    <th style="width: 30%;">Subject</th>
+                                    <th style="width: 50%;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.BlastEmailList.Count(); i++)
+                                {
+                                    var item = Model.BlastEmailList.ElementAt(i);
+
+                                    <tr>
+                                        <td style="width: 20%;">@item.BlastDateTime.ToString("dd MMM yyyy HH:mm")</td>
+                                        <td style="width: 30%;">@item.Subject</td>
+                                        <td style="width: 50%;">@Html.Raw(item.Description)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <div class="row -has-gap">
         <div class="col">
             <div class="C--table-card type--1">

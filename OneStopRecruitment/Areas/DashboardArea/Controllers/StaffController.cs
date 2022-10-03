@@ -40,6 +40,7 @@ namespace OneStopRecruitment.Areas.DashboardArea.Controllers
             dashboardStaff.UpcomingSchedules = staffService.GetUpcomingSchedule();
 
             dashboardStaffViewModel.DashboardStaff = dashboardStaff;
+            dashboardStaffViewModel.BlastEmailList = staffService.GetNotifications();
 
             return View(dashboardStaffViewModel);
         }

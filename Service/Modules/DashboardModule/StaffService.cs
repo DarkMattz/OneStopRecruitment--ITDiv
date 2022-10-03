@@ -1,4 +1,5 @@
-﻿using Model.Subdomains.DashboardSubdomain.Staff;
+﻿using Model.DTO.OneStopRecruitmentDTO;
+using Model.Subdomains.DashboardSubdomain.Staff;
 using Repository.Repositories.OneStopRecruitmentRepository;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Service.Modules.DashboardModule
         Stage GetCurrentStage(int IDStage);
         int CountCandidateByPeriod(int IDPeriod);
         List<MasterSchedule> GetUpcomingSchedule();
+        List<BlastEmail> GetNotifications();
     }
     public class StaffService : IStaffService
     {
@@ -18,18 +20,21 @@ namespace Service.Modules.DashboardModule
         private readonly IStageRepository stageRepository;
         private readonly ICandidateRepository candidateRepository;
         private readonly IMasterScheduleRepository masterScheduleRepository;
+        private readonly IBlastEmailRepository blastEmailRepository;
 
         public StaffService(
             IPeriodRepository periodRepository,
             IStageRepository stageRepository,
             ICandidateRepository candidateRepository,
-            IMasterScheduleRepository masterScheduleRepository
+            IMasterScheduleRepository masterScheduleRepository,
+            IBlastEmailRepository blastEmailRepository
         )
         {
             this.periodRepository = periodRepository;
             this.stageRepository = stageRepository;
             this.candidateRepository = candidateRepository;
             this.masterScheduleRepository = masterScheduleRepository;
+            this.blastEmailRepository = blastEmailRepository;
         }
 
         public Period GetCurrentPeriod()
@@ -77,6 +82,31 @@ namespace Service.Modules.DashboardModule
         public List<MasterSchedule> GetUpcomingSchedule()
         {
             return masterScheduleRepository.GetUpcomingSchedule();
+        }
+
+        public List<BlastEmail> GetNotifications()
+        {
+            List<BlastEmail> result = new List<BlastEmail>();
+
+            PeriodDTO period = periodRepository.GetActivePeriod();
+            List<BlastEmailDTO> blastEmailDTOs = blastEmailRepository.GetByIDPeriod(period != null ? period.IDPeriod : 0).ToList();
+
+            foreach (var item in blastEmailDTOs)
+            {
+                BlastEmail blastEmail = new BlastEmail()
+                {
+                    IDBlastEmail = item.IDBlastEmail,
+                    IDPeriod = item.IDPeriod,
+                    Subject = item.Subject,
+                    Description = item.Description,
+                    BlastDateTime = item.BlastDateTime
+                };
+                result.Add(blastEmail);
+            }
+
+            result = result.OrderByDescending(x => x.BlastDateTime).ToList();
+
+            return result;
         }
     }
 }
