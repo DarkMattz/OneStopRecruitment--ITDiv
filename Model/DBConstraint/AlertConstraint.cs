@@ -30,6 +30,7 @@
             public const string UsernameNotFound = "NIM / Username doesn't exist!";
             public const string EmptyPassword = "Password must be filled!";
             public const string InvalidPassword = "Invalid password!";
+            public const string InvalidPeriod = "Your account is not in an active recruitment period";
         }
 
         public static class Registration
@@ -159,6 +160,7 @@
             public const string ConfirmPasswordNotMatch = "Confirm password is not matched!";
             public const string PasswordLength = "Password length must be at least 8 characters!";
             public const string IncorrectOldPassword = "Old password is incorrect!";
+            public const string UnauthorizedAccess = "Unauthorized Access!";
         }
 
         public static class Email

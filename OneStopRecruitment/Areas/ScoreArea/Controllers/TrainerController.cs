@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model.DBConstraint;
 using OneStopRecruitment.Areas.ScoreArea.ViewModels.Trainer;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DataDirectoryHelpers;
 using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
@@ -31,6 +32,7 @@ namespace OneStopRecruitment.Areas.ScoreArea.Controllers
         [HttpGet]
         public IActionResult Index(Guid CandidateID, Guid ScheduleID, int AssignmentID = -1)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Trainer.Id);
             ScoreTrainerViewModel viewModel = new ScoreTrainerViewModel();
             viewModel.Candidate = trainerService.GetCandidateData(CandidateID, AssignmentID);
             viewModel.QuestionList = trainerService.GetQuestionList(CandidateID, AssignmentID);
@@ -44,6 +46,7 @@ namespace OneStopRecruitment.Areas.ScoreArea.Controllers
         [HttpGet]
         public async Task<IActionResult> DownloadSubmission(string FilePath)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Trainer.Id);
             return await fileHelper.DownloadFile(FilePath, DirectoryConstraint.ASSIGNMENT_ANSWER_FILE);
         }
 

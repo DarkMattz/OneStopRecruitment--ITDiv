@@ -5,7 +5,9 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.MinimumScoreSubdomain;
 using OneStopRecruitment.Areas.MinimumScoreArea.ViewModels;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.MinimumScoreModule;
@@ -24,8 +26,10 @@ namespace OneStopRecruitment.Areas.MinimumScoreArea.Controllers
             this.minimumScoreService = minimumScoreService;                                    
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MinimumScoreViewModel viewModel = new MinimumScoreViewModel();
             viewModel.MinimumScoreList = minimumScoreService.GetAllMinimumScore();
             return View(viewModel);
@@ -97,6 +101,7 @@ namespace OneStopRecruitment.Areas.MinimumScoreArea.Controllers
         [HttpGet]
         public IActionResult InsertMinimumScore()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MinimumScoreViewModel viewModel = new MinimumScoreViewModel();
             viewModel.MinimumScore = new MinimumScore();
             viewModel.PeriodList = GetPeriodDropdown().ToList();
@@ -109,6 +114,7 @@ namespace OneStopRecruitment.Areas.MinimumScoreArea.Controllers
         [HttpGet]        
         public IActionResult UpdateMinimumScore(int MinimumScoreID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MinimumScoreViewModel viewModel = new MinimumScoreViewModel();
             viewModel.MinimumScore = minimumScoreService.GetMinimumScoreByID(MinimumScoreID);
             viewModel.PeriodList = GetPeriodDropdown().ToList();

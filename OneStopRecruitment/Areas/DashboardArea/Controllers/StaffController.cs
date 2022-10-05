@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Model.DBConstraint;
 using Model.Subdomains.DashboardSubdomain.Staff;
 using OneStopRecruitment.Areas.DashboardArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using Service.Modules.DashboardModule;
+using System;
 
 namespace OneStopRecruitment.Areas.DashboardArea.Controllers
 {
@@ -17,6 +21,9 @@ namespace OneStopRecruitment.Areas.DashboardArea.Controllers
 
         public IActionResult Index()
         {
+
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             DashboardStaffViewModel dashboardStaffViewModel = new DashboardStaffViewModel();
 
             var currentPeriod = staffService.GetCurrentPeriod();

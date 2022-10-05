@@ -61,7 +61,7 @@
                                     <tr>
                                         <td style="width: 20%;">@item.BlastDateTime.ToString("dd MMM yyyy HH:mm")</td>
                                         <td style="width: 30%;">@item.Subject</td>
-                                        <td style="width: 50%;">@Html.Raw(item.Description)</td>
+                                        <td style="width: 50%; white-space: pre-wrap;">@Html.Raw(item.Description)</td>
                                     </tr>
                                 }
                             </tbody>
@@ -117,5 +117,10 @@
     </div>
 </div>
 <script>
-
+        $(
+            () => {
+            $('#notificationTable').dataTable({
+                "order": []
+            });
+        })
 </script>

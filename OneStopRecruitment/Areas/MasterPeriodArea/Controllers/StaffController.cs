@@ -3,6 +3,8 @@ using Model.DBConstraint;
 using Model.Subdomains.MasterPeriodSubdomain;
 using OneStopRecruitment.Areas.MasterPeriodArea.ViewModels;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.MasterPeriodModule;
@@ -18,9 +20,11 @@ namespace OneStopRecruitment.Areas.MasterPeriodArea.Controllers
         {
             this.staffService = staffService;
         }
-
+        
+        [HttpGet]
         public IActionResult Index()
-        {            
+        {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterPeriodViewModel viewModel = new MasterPeriodViewModel();
             viewModel.PeriodList = staffService.GetAllPeriod();
             return View(viewModel);
@@ -35,6 +39,7 @@ namespace OneStopRecruitment.Areas.MasterPeriodArea.Controllers
         [HttpGet]
         public IActionResult InsertPeriod()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterPeriodViewModel viewModel = new MasterPeriodViewModel();
             viewModel.Period = new Period();
             viewModel.Period.DeadlineStart = DateTime.Now;
@@ -46,6 +51,7 @@ namespace OneStopRecruitment.Areas.MasterPeriodArea.Controllers
         [HttpGet]
         public IActionResult UpdatePeriod(int PeriodID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterPeriodViewModel viewModel = new MasterPeriodViewModel();
             viewModel.Period = staffService.GetPeriodByID(PeriodID);
             if(viewModel.Period == null)

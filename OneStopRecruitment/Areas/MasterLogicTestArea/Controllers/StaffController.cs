@@ -6,8 +6,10 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.MasterLogicTestSubdomain;
 using OneStopRecruitment.Areas.MasterLogicTestArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DataDirectoryHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.MasterLogicTestModule;
@@ -59,9 +61,10 @@ namespace OneStopRecruitment.Areas.MasterLogicTestArea.Controllers
                 question.FourthChoiceImage = fileHelper.GetImagePath(question.FourthChoiceImage, DirectoryConstraint.LOGIC_TEST_ANSWER_IMAGE);
             }
         }
-
+        [HttpGet]
         public IActionResult Index()
-        {            
+        {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             List<MasterLogicTestQuestion> questionList = staffService.GetAllLogicTestQuestion();
             MasterLogicTestViewModel viewModel = new MasterLogicTestViewModel();
             foreach(var item in questionList)
@@ -75,6 +78,7 @@ namespace OneStopRecruitment.Areas.MasterLogicTestArea.Controllers
         [HttpGet]
         public IActionResult InsertQuestionType()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterLogicTestViewModel viewModel = new MasterLogicTestViewModel();
             viewModel.LogicTestQuestionType = new LogicTestQuestionType();
             return View("InsertQuestionType", viewModel);
@@ -100,6 +104,7 @@ namespace OneStopRecruitment.Areas.MasterLogicTestArea.Controllers
         [HttpGet]
         public IActionResult InsertQuestion()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterLogicTestViewModel viewModel = new MasterLogicTestViewModel();
             viewModel.MasterLogicTestQuestion = new MasterLogicTestQuestion();
             viewModel.LogicTestQuestionTypeList = GetQuestionTypeDropdown().ToList();
@@ -110,6 +115,7 @@ namespace OneStopRecruitment.Areas.MasterLogicTestArea.Controllers
         [HttpGet]
         public IActionResult UpdateQuestion(string LogicTestQuestionID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterLogicTestViewModel viewModel = new MasterLogicTestViewModel();
             viewModel.LogicTestQuestionTypeList = GetQuestionTypeDropdown().ToList();
             MasterLogicTestQuestion question = staffService.GetQuestionByID(new Guid(LogicTestQuestionID));
@@ -419,6 +425,7 @@ namespace OneStopRecruitment.Areas.MasterLogicTestArea.Controllers
         [HttpGet]
         public IActionResult ViewPickQuestion()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterLogicTestViewModel viewModel = new MasterLogicTestViewModel();
             viewModel.PeriodList = staffService.GetAllPeriod();
             return View("PickQuestion", viewModel);

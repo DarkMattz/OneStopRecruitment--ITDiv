@@ -5,7 +5,9 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.MasterScoringComponentSubdomain;
 using OneStopRecruitment.Areas.MasterScoringComponentArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.MasterScoringComponentModule;
@@ -24,8 +26,10 @@ namespace OneStopRecruitment.Areas.MasterScoringComponentArea.Controllers
             this.staffService = staffService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterScoringComponentViewModel viewModel = new MasterScoringComponentViewModel();
             viewModel.ScoringComponentList = staffService.GetAllScoringComponent();
             return View(viewModel);
@@ -34,6 +38,7 @@ namespace OneStopRecruitment.Areas.MasterScoringComponentArea.Controllers
         [HttpGet]
         public IActionResult InsertScoringComponentType()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterScoringComponentViewModel viewModel = new MasterScoringComponentViewModel();
             viewModel.ScoringComponentType = new ScoringComponentType();
             return View("InsertScoringComponentType", viewModel);
@@ -178,7 +183,8 @@ namespace OneStopRecruitment.Areas.MasterScoringComponentArea.Controllers
         [EncryptedActionParameter]
         [HttpGet]
         public IActionResult UpdateScoringComponent(string ScoringComponentID)
-        {            
+        {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterScoringComponentViewModel viewModel = new MasterScoringComponentViewModel()
             {
                 ScoringComponent = staffService.GetScoringComponentByID(new Guid(ScoringComponentID)),

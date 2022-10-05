@@ -153,13 +153,11 @@ namespace Service.Modules.MasterCandidateModule
 
             foreach(var candidate in candidateList)
             {
-                PS_N_PERSONCAR_TBLDTO personCar = null;
-
-                //PS_N_PERSONCAR_TBLDTO personCar = candidateDetailsList
-                //                                    .Where(x => x.EMPLID.Equals(candidate.NIM) ||
-                //                                                x.EXTERNAL_SYSTEM_ID.Equals(candidate.NIM) ||
-                //                                                x.N_STDNT_ID2.Equals(candidate.NIM)
-                //                                    ).FirstOrDefault();
+               PS_N_PERSONCAR_TBLDTO personCar = candidateDetailsList
+                                                    .Where(x => x.EMPLID.Equals(candidate.NIM) ||
+                                                                x.EXTERNAL_SYSTEM_ID.Equals(candidate.NIM) ||
+                                                                x.N_STDNT_ID2.Equals(candidate.NIM)
+                                                    ).FirstOrDefault();
 
                 Candidate item = new Candidate()
                 {

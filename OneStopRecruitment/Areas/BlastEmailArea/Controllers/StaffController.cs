@@ -4,9 +4,12 @@ using Model.DBConstraint;
 using Model.Subdomains.DropdownSubdomain;
 using OneStopRecruitment.Areas.BlastEmailArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Models;
 using Service.Modules.BlastEmailModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,7 +46,9 @@ namespace OneStopRecruitment.Areas.BlastEmailArea.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             return View();
+
         }
 
         [HttpPost]

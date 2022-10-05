@@ -4,10 +4,13 @@ using Model.DBConstraint;
 using Model.Subdomains.DropdownSubdomain;
 using OneStopRecruitment.Areas.MasterCandidateArea.ViewModels;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.MasterCandidateModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -79,6 +82,7 @@ namespace OneStopRecruitment.Areas.MasterCandidateArea.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             CandidateViewModel viewModel = new CandidateViewModel();            
             viewModel.PeriodList = GetPeriodDropdown().ToList();
             viewModel.StageList = GetStageDropdown().ToList();

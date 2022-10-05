@@ -3,6 +3,8 @@ using Model.DBConstraint;
 using Model.Subdomains.StageSubdomain;
 using OneStopRecruitment.Areas.StageArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.StageModule;
@@ -17,9 +19,10 @@ namespace OneStopRecruitment.Areas.StageArea.Controllers
         {
             this.staffService = staffService;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             StageResultViewModel stageResultViewModel = new StageResultViewModel();
             stageResultViewModel.StageList = staffService.GetStages();
             return View(stageResultViewModel);
@@ -28,6 +31,8 @@ namespace OneStopRecruitment.Areas.StageArea.Controllers
         [HttpGet]
         public IActionResult InsertStage()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             StageFormViewModel stageFormViewModel = new StageFormViewModel();
 
             stageFormViewModel.StageForm = new Model.Subdomains.StageSubdomain.Stage();
@@ -73,6 +78,8 @@ namespace OneStopRecruitment.Areas.StageArea.Controllers
         [EncryptedActionParameter]
         public IActionResult UpdateStage(int StageID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             StageFormViewModel stageFormViewModel = new StageFormViewModel();
 
             stageFormViewModel.StageForm = staffService.GetStageById(StageID);

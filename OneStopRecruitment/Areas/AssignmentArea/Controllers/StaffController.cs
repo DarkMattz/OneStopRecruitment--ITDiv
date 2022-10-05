@@ -7,8 +7,10 @@ using Model.Subdomains.AssignmentSubdomain.Staff;
 using Model.Subdomains.DropdownSubdomain;
 using OneStopRecruitment.Areas.AssignmentArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DataDirectoryHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.AssignmentModule;
@@ -266,6 +268,8 @@ namespace OneStopRecruitment.Areas.AssignmentArea.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             AssignmentResultViewModel assignmentResultViewModel = new AssignmentResultViewModel();
 
             GetResultInitialData(assignmentResultViewModel);
@@ -288,6 +292,7 @@ namespace OneStopRecruitment.Areas.AssignmentArea.Controllers
         [HttpGet]
         public IActionResult InsertAssignment()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             AssignmentFormViewModel assignmentFormViewModel = new AssignmentFormViewModel();
             Assignment assignment = new Assignment();
             assignmentFormViewModel.AssignmentForm = assignment;
@@ -369,6 +374,7 @@ namespace OneStopRecruitment.Areas.AssignmentArea.Controllers
         [EncryptedActionParameter]
         public async Task<IActionResult> UpdateAssignment(int AssignmentID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             AssignmentFormViewModel assignmentFormViewModel = new AssignmentFormViewModel();
             Assignment assignment = new Assignment();
 
@@ -446,6 +452,7 @@ namespace OneStopRecruitment.Areas.AssignmentArea.Controllers
         [EncryptedActionParameter]
         public IActionResult AssignmentDetails(int AssignmentID, Guid ScheduleID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             AssignmentDetailsViewModel assignmentDetailsViewModel = new AssignmentDetailsViewModel();
             assignmentDetailsViewModel.Schedule = staffService.GetAssignmentDetailsIDAssignmentAndIDSubmission(AssignmentID, ScheduleID);
             assignmentDetailsViewModel.SubmissionList = staffService.GetSubmissionsByIDAssignmentAndIDSubmission(AssignmentID, ScheduleID);

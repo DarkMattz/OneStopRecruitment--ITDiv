@@ -75,13 +75,12 @@ namespace OneStopRecruitment.Areas.LoginArea.Controllers
                 }
 
                 bool isUserExist = mainService.GetUserAvailability(loginViewModel.Login.Username.Trim().ToLower());
-                if (isUserExist == false)
+                if (!isUserExist)
                 {
                     TempData["ErrorMessage"] = AlertConstraint.Login.UsernameNotFound;
                     return RedirectToAction("Index");
                 }
-
-                if (isUserExist == true)
+                else 
                 {
                     User user = mainService.GetUserLogin(loginViewModel.Login.Username.Trim().ToLower(), loginViewModel.Login.Password);
                     if (user == null)
@@ -91,7 +90,7 @@ namespace OneStopRecruitment.Areas.LoginArea.Controllers
                     }
 
                     // Check if the user is candidate then check if the user is registered in current active period
-                    if (user.IDRole != 2 || (user.IDRole == 2 && mainService.IsActiveCandidate(user.Username)))
+                    else if (user.IDRole != 2 || (user.IDRole == 2 && mainService.IsActiveCandidate(user.Username)))
                     {
                         HttpContext.Session.SetLoggedinUser(new Helpers.HttpExtensions.Login
                         {
@@ -105,9 +104,11 @@ namespace OneStopRecruitment.Areas.LoginArea.Controllers
 
                         return RedirectToAction("Index", user.RoleName, new { area = "DashboardArea" });
                     }
-
-                    TempData["ErrorMessage"] = AlertConstraint.Login.InvalidPassword;
-                    return RedirectToAction("Index");
+                    else 
+                    {
+                        TempData["ErrorMessage"] = AlertConstraint.Login.InvalidPeriod;
+                        return RedirectToAction("Index");
+                    }
                 }
 
                 TempData["ErrorMessage"] = AlertConstraint.Default.Error;

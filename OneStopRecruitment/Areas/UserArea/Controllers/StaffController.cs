@@ -6,7 +6,9 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.UserSubdomain;
 using OneStopRecruitment.Areas.UserArea.ViewModels;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.UserModule;
@@ -51,6 +53,7 @@ namespace OneStopRecruitment.Areas.UserArea.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             UserViewModel viewModel = new UserViewModel();
             GetInitialData(viewModel);
             return View(viewModel);
@@ -59,6 +62,7 @@ namespace OneStopRecruitment.Areas.UserArea.Controllers
         [HttpPost]
         public IActionResult Index(UserViewModel viewModel)
         {
+
             if (!ModelState.IsValid)
             {
                 AddNotification(PopUpNotification.Notify(BaseConstraint.NotificationType.Failed, AlertConstraint.Default.RequiredForm));
@@ -71,6 +75,7 @@ namespace OneStopRecruitment.Areas.UserArea.Controllers
         [HttpGet]
         public IActionResult InsertUser()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             UserViewModel viewModel = new UserViewModel();
             viewModel.User = new User();
             viewModel.RoleList = GetRoleDropdown().ToList();
@@ -81,6 +86,7 @@ namespace OneStopRecruitment.Areas.UserArea.Controllers
         [EncryptedActionParameter]
         public IActionResult UpdateUser(string UserID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             UserViewModel viewModel = new UserViewModel();
             viewModel.User = userService.GetUserByID(new Guid(UserID));
             viewModel.RoleList = GetRoleDropdown().ToList();
@@ -91,6 +97,7 @@ namespace OneStopRecruitment.Areas.UserArea.Controllers
         [EncryptedActionParameter]
         public IActionResult UpdatePassword(string UserID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             User user = new User();
             user.IDUser = new Guid(UserID);
             UserViewModel viewModel = new UserViewModel()

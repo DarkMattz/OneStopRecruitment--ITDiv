@@ -5,7 +5,9 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.SubStageSubdomain;
 using OneStopRecruitment.Areas.SubstageArea.ViewModels;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Models;
 using Service.Modules.SubStageModule;
 using System.Collections.Generic;
@@ -22,8 +24,10 @@ namespace OneStopRecruitment.Areas.SubstageArea.Controllers
             this.subStageService = subStageService;            
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             SubstageViewModel viewModel = new SubstageViewModel();
             viewModel.SubStageList = subStageService.GetAllSubStage();
             return View(viewModel);
@@ -49,6 +53,7 @@ namespace OneStopRecruitment.Areas.SubstageArea.Controllers
         [HttpGet]
         public IActionResult InsertSubstage()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             SubstageViewModel viewModel = new SubstageViewModel();
             viewModel.SubStage = new SubStage();
             viewModel.StageList = GetStageDropdown().ToList();
@@ -58,6 +63,7 @@ namespace OneStopRecruitment.Areas.SubstageArea.Controllers
         [HttpGet]
         public IActionResult UpdateSubstage(int SubStageID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             SubstageViewModel viewModel = new SubstageViewModel();
             viewModel.SubStage = subStageService.GetSubStageByID(SubStageID);
             viewModel.StageList = GetStageDropdown().ToList();

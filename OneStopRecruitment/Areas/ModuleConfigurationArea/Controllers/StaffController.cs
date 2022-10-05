@@ -5,7 +5,9 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.ModuleConfigurationSubdomain;
 using OneStopRecruitment.Areas.ModuleConfigurationArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.ModuleConfigurationModule;
@@ -58,6 +60,8 @@ namespace OneStopRecruitment.Areas.ModuleConfigurationArea.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             ModuleConfigurationResultViewModel moduleConfigurationResultViewModel = new ModuleConfigurationResultViewModel();
 
             GetResultInitialData(moduleConfigurationResultViewModel);
@@ -80,6 +84,8 @@ namespace OneStopRecruitment.Areas.ModuleConfigurationArea.Controllers
         [HttpGet]
         public IActionResult InsertModule()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             ModuleConfigurationFormViewModel moduleConfigurationFormViewModel = new ModuleConfigurationFormViewModel();
 
             GetFormInitialData(moduleConfigurationFormViewModel);
@@ -125,6 +131,8 @@ namespace OneStopRecruitment.Areas.ModuleConfigurationArea.Controllers
         [EncryptedActionParameter]
         public IActionResult UpdateModule(Guid ModuleID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
+
             ModuleConfigurationFormViewModel moduleConfigurationFormViewModel = new ModuleConfigurationFormViewModel();
 
             GetFormInitialData(moduleConfigurationFormViewModel);

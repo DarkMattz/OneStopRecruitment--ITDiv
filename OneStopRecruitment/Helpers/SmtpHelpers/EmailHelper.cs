@@ -47,9 +47,9 @@ namespace OneStopRecruitment.Helpers.SmtpHelpers
 
                 message.From = _masking;
                 message.Subject = email.Subject;
-                message.SubjectEncoding = Encoding.UTF8;
+                message.SubjectEncoding = Encoding.Unicode;
                 message.Body = email.Body;
-                message.BodyEncoding = Encoding.UTF8;
+                message.BodyEncoding = Encoding.Unicode;
                 message.IsBodyHtml = email.IsBodyHtml;
 
                 SmtpClient smtp = new SmtpClient();

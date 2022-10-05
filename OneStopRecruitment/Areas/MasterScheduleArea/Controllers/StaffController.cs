@@ -5,7 +5,9 @@ using Model.Subdomains.DropdownSubdomain;
 using Model.Subdomains.MasterScheduleSubdomain;
 using OneStopRecruitment.Areas.MasterScheduleArea.ViewModels.Staff;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.DropdownHelpers;
+using OneStopRecruitment.Helpers.HttpExtensions;
 using OneStopRecruitment.Helpers.RequestHelpers;
 using OneStopRecruitment.Models;
 using Service.Modules.MasterScheduleModule;
@@ -79,6 +81,8 @@ namespace OneStopRecruitment.Areas.MasterScheduleArea.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterScheduleViewModel viewModel = new MasterScheduleViewModel();
             viewModel.ScheduleList = new List<MasterSchedule>();
             viewModel.PeriodList = GetPeriodDropdown().ToList();
@@ -113,6 +117,7 @@ namespace OneStopRecruitment.Areas.MasterScheduleArea.Controllers
         [HttpGet]
         public IActionResult InsertSchedule()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterScheduleViewModel viewModel = new MasterScheduleViewModel();
             viewModel.Schedule = new MasterSchedule();
             viewModel.Schedule.Date = DateTime.Now;
@@ -129,6 +134,7 @@ namespace OneStopRecruitment.Areas.MasterScheduleArea.Controllers
         [HttpGet]
         public IActionResult UpdateSchedule(string ScheduleID)
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Staff.Id);
             MasterScheduleViewModel viewModel = new MasterScheduleViewModel();
             viewModel.Schedule = scheduleService.GetScheduleByID(new Guid(ScheduleID));
             viewModel.PeriodList = GetPeriodDropdown().ToList();

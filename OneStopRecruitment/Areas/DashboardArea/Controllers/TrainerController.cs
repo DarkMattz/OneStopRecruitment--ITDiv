@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Model.DBConstraint;
 using Model.Subdomains.DashboardSubdomain.Trainer;
 using OneStopRecruitment.Areas.DashboardArea.ViewModels.Trainer;
 using OneStopRecruitment.Controllers;
+using OneStopRecruitment.Helpers.AuthenticationHelpers;
 using OneStopRecruitment.Helpers.HttpExtensions;
 using Service.Modules.DashboardModule;
+using System;
 
 namespace OneStopRecruitment.Areas.DashboardArea.Controllers
 {
@@ -19,6 +22,7 @@ namespace OneStopRecruitment.Areas.DashboardArea.Controllers
 
         public IActionResult Index()
         {
+            RoleAuthenticator.AuthenticateRoleArea(HttpContext.Session.GetLoggedinUser(), BaseConstraint.Role.Trainer.Id);
             DashboardTrainerViewModel viewModel = new DashboardTrainerViewModel();
             Login login = HttpContext.Session.GetLoggedinUser();
 
