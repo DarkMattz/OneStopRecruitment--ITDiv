@@ -64,9 +64,9 @@ namespace OneStopRecruitment.Helpers.SmtpHelpers
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                throw e;
             }
         }
     }

@@ -5,6 +5,7 @@ using Repository.Repositories.OneStopRecruitmentRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Service.Modules.DashboardModule
 {
@@ -152,6 +153,7 @@ namespace Service.Modules.DashboardModule
 
             result = result.OrderBy(x => x.Date)
                 .ThenBy(x => x.StartTime)
+
                 .ThenBy(x => x.IDStage)
                 .ThenBy(x => x.IDSubStage)
                 .ToList();
@@ -161,8 +163,15 @@ namespace Service.Modules.DashboardModule
 
         public List<MasterSchedule> GetCandidateSchedules(Guid IDUser)
         {
-            List<MasterSchedule> result = new List<MasterSchedule>();
-            List<TransactionScheduleDTO> transactionCandidateScheduleDTOs = transactionScheduleRepository.GetByIDUser(IDUser).ToList();
+
+            //Get all active period
+            PeriodDTO activePeriod = periodRepository.FindAll().Where(x => x.IsActive == 1).ToList()[0];
+
+            //Get all schedule
+            List<System.Guid> activeSchedule = masterScheduleRepository.FindAll().Where(x => x.IDPeriod == activePeriod.IDPeriod).Select(x => x.IDSchedule).ToList();
+            List<TransactionScheduleDTO> transactionCandidateScheduleDTOs = transactionScheduleRepository.GetByIDUser(IDUser).Where(x => activeSchedule.Contains(x.IDSchedule)).ToList();
+
+            //Get all stage and substage
             List<StageDTO> stageDTOs = stageRepository.FindAll().ToList();
             List<SubStageDTO> subStageDTOs = subStageRepository.FindAll().ToList();
             
@@ -172,6 +181,8 @@ namespace Service.Modules.DashboardModule
             // For Count Candidate Qty
             List<TransactionScheduleDTO> transactionScheduleDTOs = transactionScheduleRepository.GetByIDScheduleList(IDCandidateScheduleList).ToList();
 
+            List<MasterSchedule> result = new List<MasterSchedule>();
+            
             foreach (var item in candidateScheduleDTOs)
             {
                 StageDTO stage = stageDTOs.Where(x => x.IDStage == item.IDStage).FirstOrDefault();

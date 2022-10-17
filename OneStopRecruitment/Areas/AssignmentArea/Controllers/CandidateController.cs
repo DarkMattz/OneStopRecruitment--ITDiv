@@ -61,9 +61,9 @@ namespace OneStopRecruitment.Areas.AssignmentArea.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                throw e;
             }
 
             return true;

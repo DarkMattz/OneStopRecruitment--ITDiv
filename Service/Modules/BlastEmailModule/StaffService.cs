@@ -54,6 +54,15 @@ namespace Service.Modules.BlastEmailModule
                 {
                     unitOfWork.Run((r, ctx) =>
                     {
+                        
+                        result = emailHelper.Send(new Email
+                        {
+                            Recipients = Recipients.Select(x => x.RecipientEmail).Distinct().ToList(),
+                            Subject = Subject,
+                            Body = Body,
+                            IsBodyHtml = true
+                        });
+
                         r.ConvertContextOfRepository(blastEmailRepository).ToUse(ctx);
                         BlastEmailDTO blastEmailDTO = new BlastEmailDTO
                         {
@@ -64,14 +73,6 @@ namespace Service.Modules.BlastEmailModule
                             BlastDateTime = DateTime.Now
                         };
                         blastEmailRepository.Insert(blastEmailDTO);
-
-                        result = emailHelper.Send(new Email
-                        {
-                            Recipients = Recipients.Select(x => x.RecipientEmail).Distinct().ToList(),
-                            Subject = Subject,
-                            Body = Body,
-                            IsBodyHtml = true
-                        });
                     });
 
                     return result;
